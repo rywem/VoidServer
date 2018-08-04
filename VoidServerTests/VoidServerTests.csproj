@@ -5,4 +5,9 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\VoidServerLibrary\VoidServerLibrary.csproj" />
+    <ProjectReference Include="..\VoidServer\VoidServer.csproj" />
+  </ItemGroup>
+
 </Project>
