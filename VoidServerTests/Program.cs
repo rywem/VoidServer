@@ -13,6 +13,8 @@ namespace VoidServerTests
         static string[] http = new string[] { "http://127.0.0.1:8080/" };
         static string[] socket = new string[] { "127.0.0.1" };
         static bool isCanceled = false;
+        static bool testsStarted = false;
+        static bool testsCompleted = false;
         static void Main(string[] args)
         {
             ServerManager.Start<VHttpListener>(http);
@@ -20,7 +22,16 @@ namespace VoidServerTests
             while(isCanceled == false)
             {
                 System.Threading.Thread.Sleep(100);
-                if(Console.KeyAvailable == true)
+
+                //todo start tests
+                testsStarted = true;
+                if (testsStarted)
+                {
+                    
+                    //todo: run tests
+                    testsCompleted = RunTest();
+                }
+                if(Console.KeyAvailable == true || testsCompleted == true)
                 {
                     if (Console.ReadKey().Key == ConsoleKey.Escape)
                     {
@@ -33,6 +44,12 @@ namespace VoidServerTests
             }
             Console.WriteLine("Stopping in 5 seconds.");
             System.Threading.Thread.Sleep(5000);
+        }
+        
+        static bool RunTest()
+        {
+            // todo: put tests here
+            return true;
         }
     }
 
