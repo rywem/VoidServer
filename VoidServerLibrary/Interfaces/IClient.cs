@@ -7,6 +7,6 @@ namespace VoidServerLibrary.Interfaces
     public interface IClient
     {
         string VResponse { get; set; }
-        void Send();
+        void Send(VRequest request);
     }
 }

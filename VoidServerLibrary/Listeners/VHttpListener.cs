@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Text;
 using VoidServerLibrary.Interfaces;
@@ -39,10 +40,25 @@ namespace VoidServerLibrary.Listeners
             // Note: The GetContext method blocks while waiting for a request. 
             HttpListenerContext context = listener.GetContext();
             HttpListenerRequest request = context.Request;
-            // Obtain a response object.
             HttpListenerResponse response = context.Response;
+
+            string responseString;
+            if(request.HasEntityBody)
+            {
+                
+                using (var reader = new StreamReader(request.InputStream,
+                                                     request.ContentEncoding))
+                {
+                    responseString = reader.ReadToEnd()+ "<EOF>";
+                }
+            }
+            else
+            {
+                responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
+            }
+            // Obtain a response object.
             // Construct a response.
-            string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
+            
             byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
             // Get a response stream and write the response to it.
             response.ContentLength64 = buffer.Length;

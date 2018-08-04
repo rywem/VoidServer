@@ -7,16 +7,12 @@ namespace VoidServerLibrary.Clients
     public class VWebClient : VoidServerLibrary.Interfaces.IClient
     {
         public string VResponse { get; set; }
-        string[] args;
-        public VWebClient(string[] args)
-        {
+        
 
-        }
-
-        public void Send()
+        public void Send(VRequest vrequest)
         {
             // Create a request for the URL.   
-            WebRequest request = WebRequest.Create(args[0]);
+            WebRequest request = WebRequest.Create(vrequest.URL);
             // If required by the server, set the credentials.  
             request.Credentials = CredentialCache.DefaultCredentials;
             // Get the response.  
