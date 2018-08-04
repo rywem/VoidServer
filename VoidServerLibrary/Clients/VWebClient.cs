@@ -6,7 +6,7 @@ namespace VoidServerLibrary.Clients
 {
     public class VWebClient : VoidServerLibrary.Interfaces.IClient
     {
-
+        public string VResponse { get; set; }
         string[] args;
         public VWebClient(string[] args)
         {
@@ -28,9 +28,10 @@ namespace VoidServerLibrary.Clients
             // Open the stream using a StreamReader for easy access.  
             StreamReader reader = new StreamReader(dataStream);
             // Read the content.  
-            string responseFromServer = reader.ReadToEnd();
+            this.VResponse = reader.ReadToEnd();
             // Display the content.  
-            Console.WriteLine(responseFromServer);
+            
+            //Console.WriteLine(responseFromServer);
             // Clean up the streams and the response.  
             reader.Close();
             response.Close();
