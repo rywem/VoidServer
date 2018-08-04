@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Text;
 
 namespace VoidServerLibrary.Clients
 {
@@ -16,6 +17,15 @@ namespace VoidServerLibrary.Clients
             // If required by the server, set the credentials.  
             request.Credentials = CredentialCache.DefaultCredentials;
             // Get the response.  
+
+            if(!string.IsNullOrEmpty(vrequest.Message))
+            {
+                byte[] byte1 = ASCIIEncoding.ASCII.GetBytes(vrequest.Message);
+
+                // Set the content type of the data being posted.
+                request.ContentType = "application/x-www-form-urlencoded";
+
+            }
             WebResponse response = request.GetResponse();
             // Display the status.  
             Console.WriteLine(((HttpWebResponse)response).StatusDescription);

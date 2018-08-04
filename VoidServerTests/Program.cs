@@ -3,6 +3,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using VoidServerLibrary;
+using VoidServerLibrary.Clients;
 using VoidServerLibrary.Interfaces;
 using VoidServerLibrary.Listeners;
 
@@ -17,7 +18,7 @@ namespace VoidServerTests
         static bool testsCompleted = false;
         static void Main(string[] args)
         {
-            ServerManager.Start<VHttpListener>(http);
+            ServerManager.Start<VSocketListener>(http);
             Console.WriteLine("Hit [ESC] to exit.");
             while(isCanceled == false)
             {
@@ -29,7 +30,8 @@ namespace VoidServerTests
                 {
                     
                     //todo: run tests
-                    testsCompleted = RunTest();
+                    testsCompleted = RunTest(socket[0]);
+                   
                 }
                 if(Console.KeyAvailable == true || testsCompleted == true)
                 {
@@ -46,9 +48,12 @@ namespace VoidServerTests
             System.Threading.Thread.Sleep(5000);
         }
         
-        static bool RunTest()
+        static bool RunTest(string url)
         {
             // todo: put tests here
+            VSocketClient client = new VSocketClient();
+            client.Send(new VRequest() { Message = "1", URL = url });
+
             return true;
         }
     }

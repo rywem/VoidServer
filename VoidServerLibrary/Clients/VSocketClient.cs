@@ -36,7 +36,8 @@ namespace VoidServerLibrary.Clients
                     int bytesSent = sender.Send(msg);
                     //receive the response from the remote device.
                     int bytesRec = sender.Receive(bytes);
-                    Console.WriteLine($"Echoed test = {Encoding.ASCII.GetString(bytes, 0, bytesRec)}");
+                    VResponse = Encoding.ASCII.GetString(bytes, 0, bytesRec);
+                    //Console.WriteLine($"Echoed test = {Encoding.ASCII.GetString(bytes, 0, bytesRec)}");
                     sender.Shutdown(SocketShutdown.Both);
                     sender.Close();
 
