@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using VoidServerLibrary.Interfaces;
+using VoidServerLibrary.Listeners;
 
 namespace VoidServerLibrary
 {
@@ -20,11 +21,6 @@ namespace VoidServerLibrary
         public static void Stop()
         {
             _cancellationSource.Cancel();
-
-            //while (ServerTask.IsCancell == false)
-            //    Thread.Sleep(100);
-
-            //ServerTask.Wait();
         }
     }
 
