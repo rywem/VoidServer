@@ -21,7 +21,7 @@ namespace VoidServerTests
         {
             ServerManager.Start<VSocketListener>(http);
             Console.WriteLine("Hit [ESC] to exit.");
-            while(isCanceled == false)
+            while (isCanceled == false)
             {
                 System.Threading.Thread.Sleep(100);
 
@@ -29,12 +29,12 @@ namespace VoidServerTests
                 testsStarted = true;
                 if (testsStarted)
                 {
-                    
+
                     //todo: run tests
                     testsCompleted = RunTest(socket[0]);
-                   
+
                 }
-                if(Console.KeyAvailable == true || testsCompleted == true)
+                if (Console.KeyAvailable == true || testsCompleted == true)
                 {
                     if (Console.ReadKey().Key == ConsoleKey.Escape)
                     {
@@ -59,14 +59,28 @@ namespace VoidServerTests
         }
     }
     [TestFixture]
-    public class ClientTests
+    public class ServerTests
     {
-        [Test]
-        public void Test()
-        {
+       
 
+    }
+
+    [SetUpFixture]
+    public class ServerSetUpClass where T : IListener
+    {
+        [OneTimeSetUp]
+        public void RunBeforeTests(string[] args)
+        {
+            ServerManager.Start<VSocketListener>(args);
+        }
+
+        [OneTimeTearDown]
+        public void RunAfterTests()
+        {
+            ServerManager.Stop();
         }
     }
+
     public class ServerManager
     {
         
