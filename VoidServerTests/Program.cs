@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using NUnit.Framework;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -57,7 +58,15 @@ namespace VoidServerTests
             return true;
         }
     }
+    [TestFixture]
+    public class ClientTests
+    {
+        [Test]
+        public void Test()
+        {
 
+        }
+    }
     public class ServerManager
     {
         
