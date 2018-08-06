@@ -49,9 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UnitTests\CalculatorTests.cs" />
     <Compile Include="ServerSetUpClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerTests.cs" />
+    <Compile Include="IntegrationTests\ServerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VoidServerLibrary\VoidServerLibrary.csproj">
@@ -62,6 +63,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

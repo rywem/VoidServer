@@ -2,7 +2,7 @@
 using VoidServerLibrary;
 using VoidServerLibrary.Clients;
 
-namespace VoidServerUnitTests
+namespace VoidServerUnitTests.IntegrationTests
 {
     [TestFixture]
     public class ServerTests
