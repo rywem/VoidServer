@@ -2,11 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using VoidServerLibrary.Requests;
 
 namespace VoidServerLibrary.Util
 {
     public class Calculator
     {
+        public int Calculate(CalculationRequest request)
+        {
+            return Calculate(request.Operation, request.a, request.b);
+
+        }
+
         public int Calculate(Operation operation, int a, int b)
         {
             switch (operation)

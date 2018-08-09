@@ -49,7 +49,13 @@ namespace VoidServerLibrary.Listeners
                 using (var reader = new StreamReader(request.InputStream,
                                                      request.ContentEncoding))
                 {
-                    responseString = reader.ReadToEnd()+ "<EOF>";
+                    //responseString = reader.ReadToEnd()+ "<EOF>";
+
+                    string requestString = reader.ReadToEnd();
+
+                    Requests.CalculationRequest crequest = Newtonsoft.Json.JsonConvert.DeserializeObject<Requests.CalculationRequest>(requestString);
+                    var calc = new Util.Calculator();
+                    responseString = calc.Calculate(crequest).ToString();
                 }
             }
             else

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace VoidServerLibrary
+namespace VoidServerLibrary.Requests
 {
     public class VRequest
     {

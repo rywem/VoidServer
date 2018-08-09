@@ -44,9 +44,18 @@ namespace VoidServerLibrary.Listeners
                         if (data.IndexOf("<EOF>") > -1)
                             break;
                     }
+
+                    data = data.Substring(0,data.Length-5);
+                    //string requestString = reader.ReadToEnd();
+
+                    Requests.CalculationRequest crequest = Newtonsoft.Json.JsonConvert.DeserializeObject<Requests.CalculationRequest>(data);
+                    var calc = new Util.Calculator();
+                    string responseString = calc.Calculate(crequest).ToString();
                     //show the data on the console
-                    Console.WriteLine("1");
-                    byte[] msg = Encoding.ASCII.GetBytes(data);
+                    //Console.WriteLine("1");
+
+
+                    byte[] msg = Encoding.ASCII.GetBytes(responseString);
                     handler.Send(msg);
                     handler.Shutdown(SocketShutdown.Both);
                     handler.Close();

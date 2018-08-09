@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using VoidServerLibrary.Requests;
 
 namespace VoidServerLibrary.Clients
 {
@@ -10,7 +11,7 @@ namespace VoidServerLibrary.Clients
     {
         public string VResponse { get; set; }
 
-        public void Send(VRequest vrequest)
+        public void Send(CalculationRequest vrequest)
         {
             // Data buffer for incoming data.  
             byte[] bytes = new byte[1024];
@@ -31,7 +32,8 @@ namespace VoidServerLibrary.Clients
                 {
                     sender.Connect(remoteEP);
                     Console.WriteLine($"Socket connected to {sender.RemoteEndPoint}");
-                    byte[] msg = Encoding.ASCII.GetBytes($"{vrequest.Message}<EOF>");
+                    string requestString = Newtonsoft.Json.JsonConvert.SerializeObject(vrequest);
+                    byte[] msg = Encoding.ASCII.GetBytes($"{requestString}<EOF>");
                     //send the data through the socket
                     int bytesSent = sender.Send(msg);
                     //receive the response from the remote device.
