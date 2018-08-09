@@ -11,6 +11,7 @@ namespace VoidServerUnitTests.Objects
     {
         public void Start(string[] args)
         {
+            //TODO: add a Null pattern object NullListener
             throw new NotImplementedException();
         }
     }
