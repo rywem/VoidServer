@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using VoidServerLibrary.Interfaces;
 
 namespace VoidServerLibrary.Listeners
@@ -11,7 +12,7 @@ namespace VoidServerLibrary.Listeners
     {
         bool start = true;
         string data = null;
-        public void Start(string[] args)
+        public void Start(CancellationToken token, string[] args)
         {
             //data buffer
             byte[] bytes = new byte[1024];
@@ -19,7 +20,7 @@ namespace VoidServerLibrary.Listeners
             //dns.GetHostName returns the name of the host running the app
             IPHostEntry iPHostEntry = Dns.GetHostEntry(Dns.GetHostName());
 
-            IPAddress ipAddress = IPAddress.Parse("127.0.0.1");//ipHostInfo.AddressList[0];
+            IPAddress ipAddress = IPAddress.Parse(args[0]);//ipHostInfo.AddressList[0];
             IPEndPoint localEndpoint = new IPEndPoint(ipAddress, 8080);
             Console.WriteLine($"endpoint: {localEndpoint.ToString()}");
             //create the tcp/ip socket
@@ -31,30 +32,27 @@ namespace VoidServerLibrary.Listeners
                 listener.Bind(localEndpoint);
                 listener.Listen(10);
                 //start listening for connections
-                while (start == true)
+                while (start == true && token.IsCancellationRequested == false)
                 {
                     Console.WriteLine("Awaiting Connection... ");
                     Socket handler = listener.Accept();
                     data = null;
                     // an incoming connection needs to be processed
+                    int count = 0;
                     while (true)
                     {
                         int bytesRec = handler.Receive(bytes);
                         data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
-                        if (data.IndexOf("<EOF>") > -1)
+                        if (data.IndexOf("<EOF>") > -1 || count > 5000)
                             break;
+                        count++;
                     }
 
-                    data = data.Substring(0,data.Length-5);
-                    //string requestString = reader.ReadToEnd();
-
+                    data = data.Substring(0,data.Length-5);                    
                     Requests.CalculationRequest crequest = Newtonsoft.Json.JsonConvert.DeserializeObject<Requests.CalculationRequest>(data);
                     var calc = new Util.Calculator();
                     string responseString = calc.Calculate(crequest).ToString();
                     //show the data on the console
-                    //Console.WriteLine("1");
-
-
                     byte[] msg = Encoding.ASCII.GetBytes(responseString);
                     handler.Send(msg);
                     handler.Shutdown(SocketShutdown.Both);

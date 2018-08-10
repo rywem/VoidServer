@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using VoidServerLibrary.Interfaces;
 
 namespace VoidServerLibrary
@@ -15,9 +16,9 @@ namespace VoidServerLibrary
         {
 
         }
-        public void Start(string[] args)
+        public void Start(CancellationToken token, string[] args)
         {
-            _listener.Start(args);
+            _listener.Start(token, args);
         }
     }
 }

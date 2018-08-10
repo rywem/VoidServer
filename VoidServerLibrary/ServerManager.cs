@@ -15,25 +15,20 @@ namespace VoidServerLibrary
         private static CancellationTokenSource _cancellationSource = new CancellationTokenSource();
         public static void Start<T>(string[] args) where T : VoidServerLibrary.Interfaces.IListener
         {
-            ServerTask = Task.Factory.StartNew(() => Runner<T>.Start(args), _cancellationSource.Token);
+            ServerTask = Task.Factory.StartNew(() => 
+            {
+                var builder = new ContainerBuilder();
+                builder.RegisterType<T>().As<IListener>();
+                builder.RegisterType<Server>();
+                IContainer container = builder.Build();
+                var server = container.Resolve<Server>();
+                server.Start(_cancellationSource.Token, args);
+            }, _cancellationSource.Token);
         }
 
         public static void Stop()
         {
             _cancellationSource.Cancel();
-        }
-    }
-
-    public class Runner<T> where T : IListener
-    {
-        public static void Start(string[] args)
-        {
-            var builder = new ContainerBuilder();
-            builder.RegisterType<T>().As<IListener>();
-            builder.RegisterType<Server>();
-            IContainer container = builder.Build();
-            var server = container.Resolve<Server>();
-            server.Start(args);
         }
     }
 }

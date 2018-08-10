@@ -1,14 +1,26 @@
 ﻿using NUnit.Framework;
 using VoidServerLibrary;
 using VoidServerLibrary.Clients;
+using VoidServerLibrary.Listeners;
 
-namespace VoidServerUnitTests.IntegrationTests
+namespace VoidServerUnitTests.IntegrationTests.Socket
 {
     [TestFixture]
-    public class ServerTests
+    public class SocketTests
     {
+        [SetUp]
+        public void RunBeforeAnyTests()
+        {
+            //Start the server listener as a task
+            ServerManager.Start<VSocketListener>(new string[] { "127.0.0.1" });
+        }
+        [TearDown]
+        public void RunAfterAnyTests()
+        {
+            ServerManager.Stop();
+        }
         [Test]
-        public void TestServerReturnsAdditionAnswer()
+        public void TestSocketCalculatesAdditionAnswer()
         {
             // todo: put tests here
             VSocketClient client = new VSocketClient();
@@ -18,7 +30,7 @@ namespace VoidServerUnitTests.IntegrationTests
         }
 
         [Test]
-        public void TestServerReturnsSubstractionAnswer()
+        public void TestSocketCalculatesSubstractionAnswer()
         {
             // todo: put tests here
             VSocketClient client = new VSocketClient();

@@ -52,11 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Objects\VNullListener.cs" />
+    <Compile Include="IntegrationTests\HttpTests.cs" />
+    <Compile Include="Objects\VStubListener.cs" />
     <Compile Include="UnitTests\CalculatorTests.cs" />
-    <Compile Include="ServerSetUpClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IntegrationTests\ServerTests.cs" />
+    <Compile Include="IntegrationTests\SocketTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VoidServerLibrary\VoidServerLibrary.csproj">
