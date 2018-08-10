@@ -25,7 +25,11 @@ namespace VoidServerLibrary.Clients
             // Set the content type of the data being posted.
             //request.ContentType = "application/x-www-form-urlencoded";
             request.ContentType = "application/json";
-
+            request.Method = "POST";
+            using (var stream = request.GetRequestStream())
+            {
+                stream.Write(byte1, 0, byte1.Length);
+            }
             WebResponse response = request.GetResponse();
             // Display the status.  
             Console.WriteLine(((HttpWebResponse)response).StatusDescription);
