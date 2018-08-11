@@ -22,7 +22,7 @@ namespace VoidServerLibrary.Clients
                 // Establish the remote endpoint for the socket.  
                 // This example uses port 11000 on the local computer.  
                 IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-                IPAddress ipAddress = IPAddress.Parse(vrequest.URL);//ipHostInfo.AddressList[0];
+                IPAddress ipAddress = IPAddress.Parse(vrequest.URL);
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, 8080);
 
                 // Create a TCP/IP  socket.  
@@ -39,7 +39,6 @@ namespace VoidServerLibrary.Clients
                     //receive the response from the remote device.
                     int bytesRec = sender.Receive(bytes);
                     VResponse = Encoding.ASCII.GetString(bytes, 0, bytesRec);
-                    //Console.WriteLine($"Echoed test = {Encoding.ASCII.GetString(bytes, 0, bytesRec)}");
                     sender.Shutdown(SocketShutdown.Both);
                     sender.Close();
 

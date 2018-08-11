@@ -8,13 +8,13 @@ namespace VoidServerUnitTests.IntegrationTests.Socket
     [TestFixture]
     public class SocketTests
     {
-        [SetUp]
+        [OneTimeSetUp]
         public void RunBeforeAnyTests()
         {
             //Start the server listener as a task
             ServerManager.Start<VSocketListener>(new string[] { "127.0.0.1" });
         }
-        [TearDown]
+        [OneTimeTearDown]
         public void RunAfterAnyTests()
         {
             ServerManager.Stop();

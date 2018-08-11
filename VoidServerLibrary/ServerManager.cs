@@ -29,6 +29,8 @@ namespace VoidServerLibrary
         public static void Stop()
         {
             _cancellationSource.Cancel();
+            ServerTask.Wait();
+            Thread.Sleep(100);
         }
     }
 }
