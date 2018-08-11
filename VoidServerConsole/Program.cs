@@ -21,6 +21,9 @@ namespace VoidServerConsole
             bool testsCompleted = false;
             //ServerManager.Start<VSocketListener>(socket);
             ServerManager.Start<VHttpListener>(http);
+            //Runner r = new Runner();
+            //r.RunServer(http);
+            Console.ReadKey();
             Console.WriteLine("Hit [ESC] to exit.");
             while (testsCompleted == false)
             {
@@ -48,6 +51,15 @@ namespace VoidServerConsole
             //client.Send(new VRequest() { Message = "1", URL = url });
             client.Send(new CalculationRequest() {a = 1, b = 3, Operation = VoidServerLibrary.Util.Operation.Addition, URL = url });
             return true;
+        }
+    }
+
+    public class Runner
+    {
+        public void RunServer(string[] args)
+        {
+            Server server = new Server(new VHttpListener());
+            server.Start(new System.Threading.CancellationToken(), args);
         }
     }
 }

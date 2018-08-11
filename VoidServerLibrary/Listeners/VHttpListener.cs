@@ -4,75 +4,164 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using VoidServerLibrary.Interfaces;
 
 namespace VoidServerLibrary.Listeners
 {
     public class VHttpListener : IListener
     {
-
-        public void Start(CancellationToken token, string[] prefixes)
+        public void Start(string[] prefixes, CancellationToken token = default)
         {
-            if (!HttpListener.IsSupported)
+            try
             {
-                Console.WriteLine("Windows XP SP2 or Server 2003 is required to use the HttpListener class.");
+                if (token != null)
+                    token.ThrowIfCancellationRequested();
+
+                if (!HttpListener.IsSupported)
+                {
+                    Console.WriteLine("Windows XP SP2 or Server 2003 is required to use the HttpListener class.");
+                    return;
+                }
+
+                // URI prefixes are required,
+                // for example "http://contoso.com:8080/index/".
+                if (prefixes == null || prefixes.Length == 0)
+                    throw new ArgumentException("prefixes missing");
+
+
+                // Create a listener.
+                HttpListener listener = new HttpListener();
+                // Add the prefixes.
+                foreach (string s in prefixes)
+                {
+                    listener.Prefixes.Add(s);
+                }
+
+                listener.Start();
+                Console.WriteLine("Listening... Waiting for request to be processed asyncronously.");
+                while (token.IsCancellationRequested == false)
+                {
+                    try
+                    {
+                        IAsyncResult result = listener.BeginGetContext(new AsyncCallback(ListenerCallback), listener);
+                        // Applications can do some work here while waiting for the 
+                        // request. If no work can be done until you have processed a request,
+                        // use a wait handle to prevent this thread from terminating
+                        // while the asynchronous operation completes.                
+
+                        result.AsyncWaitHandle.WaitOne();
+                        Console.WriteLine("Request processed asyncronously.");
+                        //if(result.IsCompleted == true)
+                        //System.Threading.Thread.Sleep(10);
+
+                        //output.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        break;
+                    }
+
+                }
+                listener.Close();
+                listener.Stop();
+            }
+            catch (Exception ex)
+            {
                 return;
             }
+        }
 
-            // URI prefixes are required,
-            // for example "http://contoso.com:8080/index/".
-            if (prefixes == null || prefixes.Length == 0)
-                throw new ArgumentException("prefixes missing");
+        
 
+        public void ListenerCallback(IAsyncResult result)
+        {
+            //HttpListenerContext context = listener.GetContext();
+            //if (context == null)
+            //continue;
+            HttpListener listener = (HttpListener)result.AsyncState;
+            // Call EndGetContext to complete the asynchronous operation.
+            HttpListenerContext context = listener.EndGetContext(result);
+            HttpListenerRequest request = context.Request;
+            HttpListenerResponse response = context.Response;
 
-            // Create a listener.
-            HttpListener listener = new HttpListener();
-            // Add the prefixes.
-            foreach (string s in prefixes)
+            string responseString;
+            if (request.HasEntityBody)
             {
-                listener.Prefixes.Add(s);
+
+                using (var reader = new StreamReader(request.InputStream,
+                                                     request.ContentEncoding))
+                {
+                    //responseString = reader.ReadToEnd()+ "<EOF>";
+                    string requestString = reader.ReadToEnd();
+                    Console.WriteLine(requestString);
+                    Requests.CalculationRequest crequest = Newtonsoft.Json.JsonConvert.DeserializeObject<Requests.CalculationRequest>(requestString);
+                    var calc = new Util.Calculator();
+                    responseString = calc.Calculate(crequest).ToString();
+                }
             }
-            listener.Start();
-            Console.WriteLine("Listening...");
-            while (token.IsCancellationRequested == false)
+            else
             {
-                // Note: The GetContext method blocks while waiting for a request. 
-                HttpListenerContext context = listener.GetContext();
-                HttpListenerRequest request = context.Request;
-                HttpListenerResponse response = context.Response;
-
-                string responseString;
-                if (request.HasEntityBody)
-                {
-
-                    using (var reader = new StreamReader(request.InputStream,
-                                                         request.ContentEncoding))
-                    {
-                        //responseString = reader.ReadToEnd()+ "<EOF>";
-
-                        string requestString = reader.ReadToEnd();
-                        Console.WriteLine(requestString);
-                        Requests.CalculationRequest crequest = Newtonsoft.Json.JsonConvert.DeserializeObject<Requests.CalculationRequest>(requestString);
-                        var calc = new Util.Calculator();
-                        responseString = calc.Calculate(crequest).ToString();
-                    }
-                }
-                else
-                {
-                    responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
-                }
-                // Obtain a response object.
-                // Construct a response.
-
-                byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
-                // Get a response stream and write the response to it.
-                response.ContentLength64 = buffer.Length;
-                System.IO.Stream output = response.OutputStream;
-                output.Write(buffer, 0, buffer.Length);
-                // You must close the output stream.
-                output.Close();
+                responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
             }
-            listener.Stop();
+            // Obtain a response object.
+            // Construct a response.
+
+            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+            // Get a response stream and write the response to it.
+            response.ContentLength64 = buffer.Length;
+            System.IO.Stream output = response.OutputStream;
+            output.Write(buffer, 0, buffer.Length);
+            // You must close the output stream.
+            output.Close();
+            //listener.Close();
+        }
+
+
+
+        private void Process(object o)
+        {
+            var context = o as HttpListenerContext;
+            //context = listener.GetContext();
+            Process(context);
+        }
+
+        private void Process(HttpListenerContext context)
+        {
+            HttpListenerRequest request = context.Request;
+            HttpListenerResponse response = context.Response;
+            string responseString;
+            if (request.HasEntityBody)
+            {
+
+                using (var reader = new StreamReader(request.InputStream,
+                                                     request.ContentEncoding))
+                {
+                    string requestString = reader.ReadToEnd();
+                    Console.WriteLine(requestString);
+                    Requests.CalculationRequest crequest = Newtonsoft.Json.JsonConvert.DeserializeObject<Requests.CalculationRequest>(requestString);
+                    var calc = new Util.Calculator();
+                    responseString = calc.Calculate(crequest).ToString();
+                }
+            }
+            else
+            {
+                responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
+            }
+            // Obtain a response object.
+            // Construct a response.
+            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+            // Get a response stream and write the response to it.
+            response.ContentLength64 = buffer.Length;
+            System.IO.Stream output = response.OutputStream;
+            output.Write(buffer, 0, buffer.Length);
+            // You must close the output stream.
+            output.Close();
+        }
+
+        public Task Run(string args, CancellationToken token = default)
+        {
+            throw new NotImplementedException();
         }
     }
 }

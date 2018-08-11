@@ -17,7 +17,7 @@ namespace VoidServerUnitTests.Objects
             this.Request = request;
         }
 
-        public void Start(CancellationToken token, string[] args)
+        public void Start(string[] args, CancellationToken token)
         {
             throw new NotImplementedException();
         }

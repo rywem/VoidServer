@@ -8,16 +8,21 @@ namespace VoidServerUnitTests.IntegrationTests.Http
     [TestFixture]
     public class HttpTests
     {
-        [SetUp]
+        [OneTimeSetUp]
         public void RunBeforeAnyTests()
         {
             ServerManager.Start<VHttpListener>(new string[] { "http://127.0.0.1:8080/" });
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void RunAfterAnyTests()
         {
             ServerManager.Stop();
+        }
+
+        public void RunBetween()
+        {
+
         }
         [Test]
         public void TestHttpCalculatesAdditionAnswer()
@@ -31,10 +36,12 @@ namespace VoidServerUnitTests.IntegrationTests.Http
         [Test]
         public void TestHttpCalculatesMultiplicationAnswer()
         {
+            System.Threading.Thread.Sleep(100);
             // todo: put tests here
             VWebClient client = new VWebClient();
             client.Send(new VoidServerLibrary.Requests.CalculationRequest() { a = 2, b = 3, Operation = VoidServerLibrary.Util.Operation.Multiplication, URL = "http://127.0.0.1:8080/" });
             System.Console.WriteLine(client.VResponse);
+
             StringAssert.StartsWith((2 * 3).ToString(), client.VResponse);
         }
 
@@ -43,7 +50,7 @@ namespace VoidServerUnitTests.IntegrationTests.Http
         {
             // todo: put tests here
             VWebClient client = new VWebClient();
-            client.Send(new VoidServerLibrary.Requests.CalculationRequest() { a = 2, b = 3, Operation = VoidServerLibrary.Util.Operation.Multiplication, URL = "http://127.0.0.1:8080/" });
+            client.Send(new VoidServerLibrary.Requests.CalculationRequest() { a = 2, b = 3, Operation = VoidServerLibrary.Util.Operation.Subtraction, URL = "http://127.0.0.1:8080/" });
             System.Console.WriteLine(client.VResponse);
             StringAssert.StartsWith((2 - 3).ToString(), client.VResponse);
         }
@@ -53,7 +60,7 @@ namespace VoidServerUnitTests.IntegrationTests.Http
         {
             // todo: put tests here
             VWebClient client = new VWebClient();
-            client.Send(new VoidServerLibrary.Requests.CalculationRequest() { a = 6, b = 3, Operation = VoidServerLibrary.Util.Operation.Multiplication, URL = "http://127.0.0.1:8080/" });
+            client.Send(new VoidServerLibrary.Requests.CalculationRequest() { a = 6, b = 3, Operation = VoidServerLibrary.Util.Operation.Division, URL = "http://127.0.0.1:8080/" });
             System.Console.WriteLine(client.VResponse);
             StringAssert.StartsWith((6 / 3).ToString(), client.VResponse);
         }

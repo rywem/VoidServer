@@ -23,9 +23,9 @@ namespace VoidServerLibrary.Util
                 case Operation.Division:
                     if (a == 0 || b == 0)
                         throw new ArgumentException("argument cannot be zero");
-                    return a / b;
+                    return (a / b);
                 case Operation.Multiplication:
-                    return a * b;
+                    return (a * b);
                 case Operation.Subtraction:
                     return a - b;
                 case Operation.PowerOf:
@@ -35,22 +35,4 @@ namespace VoidServerLibrary.Util
             }
         }
     }
-
-    //public class CalculationRequest
-    //{
-    //    public int A { get; set; }
-    //    public int B { get; set; }
-    //    Operation Operation { get; set; }
-
-    //    public CalculationRequest()
-    //    {
-
-    //    }
-
-    //    public CalculationRequest(Operation operation, params int[] values)
-    //    {
-    //        this.Operation = operation;
-    //        this.Values = values;
-    //    }
-    //}
 }

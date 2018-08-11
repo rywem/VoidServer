@@ -16,9 +16,9 @@ namespace VoidServerLibrary
         {
 
         }
-        public void Start(CancellationToken token, string[] args)
+        public void Start(string[] args, CancellationToken token)
         {
-            _listener.Start(token, args);
+            _listener.Start(args, token);
         }
     }
 }

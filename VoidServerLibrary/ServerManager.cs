@@ -22,14 +22,13 @@ namespace VoidServerLibrary
                 builder.RegisterType<Server>();
                 IContainer container = builder.Build();
                 var server = container.Resolve<Server>();
-                server.Start(_cancellationSource.Token, args);
+                server.Start(args, _cancellationSource.Token);
             }, _cancellationSource.Token);
         }
 
         public static void Stop()
         {
             _cancellationSource.Cancel();
-
         }
     }
 }
