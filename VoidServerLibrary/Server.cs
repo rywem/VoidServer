@@ -20,5 +20,10 @@ namespace VoidServerLibrary
         {
             _listener.Start(args, token);
         }
+
+        public void Stop()
+        {
+            _listener.Stop();
+        }
     }
 }

@@ -3,7 +3,8 @@ using VoidServerLibrary;
 using VoidServerLibrary.Clients;
 using VoidServerLibrary.Listeners;
 
-namespace VoidServerUnitTests.IntegrationTests.Socket
+
+namespace VoidServer.IntegrationTests
 {
     [TestFixture]
     public class SocketTests

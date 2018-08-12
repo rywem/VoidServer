@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VoidServerUnitTests.UnitTests
+namespace VoidServer.UnitTests
 {
     [TestFixture]
     public class CalculatorTests

@@ -11,13 +11,13 @@ namespace VoidServerLibrary.Listeners
 {
     public class VHttpListener : IListener
     {
-        public void Start(string[] prefixes, CancellationToken token = default)
+        HttpListener listener;
+        public void Start(string[] prefixes, CancellationToken token)
         {
             try
             {
                 if (token != null)
                     token.ThrowIfCancellationRequested();
-
                 if (!HttpListener.IsSupported)
                 {
                     Console.WriteLine("Windows XP SP2 or Server 2003 is required to use the HttpListener class.");
@@ -31,7 +31,8 @@ namespace VoidServerLibrary.Listeners
 
 
                 // Create a listener.
-                HttpListener listener = new HttpListener();
+                listener = new HttpListener();
+                
                 // Add the prefixes.
                 foreach (string s in prefixes)
                 {
@@ -39,8 +40,8 @@ namespace VoidServerLibrary.Listeners
                 }
 
                 listener.Start();
-                Console.WriteLine("Listening... Waiting for request to be processed asyncronously.");
-                while (token.IsCancellationRequested == false)
+                Console.WriteLine("Listening... on  " + prefixes[0]);
+                while (token.IsCancellationRequested == false || listener.IsListening == true)
                 {
                     try
                     {
@@ -56,23 +57,30 @@ namespace VoidServerLibrary.Listeners
                         //System.Threading.Thread.Sleep(10);
 
                         //output.Close();
-                    }
+                    }                    
                     catch (Exception ex)
                     {
                         break;
                     }
 
                 }
-                listener.Close();
-                listener.Stop();
+                if(listener != null && listener.IsListening == true)
+                {
+                    listener.Close();
+                    listener.Stop();
+                }
             }
             catch (Exception ex)
             {
                 return;
             }
         }
+        public void Stop()
+        {
+            listener.Close();
+            listener.Stop();
+        }
 
-        
 
         public void ListenerCallback(IAsyncResult result)
         {
@@ -158,10 +166,6 @@ namespace VoidServerLibrary.Listeners
             // You must close the output stream.
             output.Close();
         }
-
-        public Task Run(string args, CancellationToken token = default)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

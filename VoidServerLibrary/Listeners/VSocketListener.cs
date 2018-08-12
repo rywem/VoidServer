@@ -11,13 +11,14 @@ namespace VoidServerLibrary.Listeners
     public class VSocketListener : IListener
     {
         //bool start = true;
+        
+        object _listener { get; set; }
+
         string data = null;
         public void Start(string[] args, CancellationToken token)
         {
             try
             {
-
-
                 //data buffer
                 byte[] bytes = new byte[1024];
                 //establish the local endpoint for the socket
@@ -28,13 +29,14 @@ namespace VoidServerLibrary.Listeners
                 Console.WriteLine($"endpoint: {localEndpoint.ToString()}");
                 //create the tcp/ip socket
                 Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                _listener = listener as object;
                 // bind the socket to the local endpoint and listen for incoming connections
                 try
                 {
                     listener.Bind(localEndpoint);
                     listener.Listen(10);
                     //start listening for connections
-                    while (token.IsCancellationRequested == false)
+                    while (token.IsCancellationRequested==false)
                     {
                         try
                         {
@@ -81,6 +83,14 @@ namespace VoidServerLibrary.Listeners
             {
                 return;
             }
+        }
+
+        public void Stop()
+        {
+            return;
+            //throw new NotImplementedException();
+            //Socket listener = _listener as Socket;
+            //listener.Shutdown(SocketShutdown.Both);
         }
     }
 }

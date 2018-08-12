@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 namespace VoidServerLibrary.Interfaces
 {
     public interface IListener
-    {        
-        void Start(string[] args, CancellationToken token = default);
-
-        //Task Run(string args[], CancellationToken token = default);
+    {
+        void Start(string[] args, CancellationToken token);
+        void Stop();
     }
 }
