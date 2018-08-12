@@ -12,7 +12,6 @@ namespace VoidServer.IntegrationTests
         public void RunBeforeAnyTests()
         {
             ServerManager.Start<VHttpListener>(new string[] { "http://127.0.0.1:8081/" });
-            System.Threading.Thread.Sleep(1000);
         }
 
         [OneTimeTearDown]
@@ -25,7 +24,7 @@ namespace VoidServer.IntegrationTests
         {
 
         }
-        [Test, Order(1)]
+        [Test]
         public void TestHttpCalculatesAdditionAnswer()
         {
             // todo: put tests here
@@ -34,7 +33,7 @@ namespace VoidServer.IntegrationTests
             System.Console.WriteLine(client.VResponse);
             StringAssert.StartsWith((2 + 3).ToString(), client.VResponse);
         }
-        [Test, Order(2)]
+        [Test]
         public void TestHttpCalculatesMultiplicationAnswer()
         {
             System.Threading.Thread.Sleep(100);
@@ -46,7 +45,7 @@ namespace VoidServer.IntegrationTests
             StringAssert.StartsWith((2 * 3).ToString(), client.VResponse);
         }
 
-        [Test, Order(3)]
+        [Test]
         public void TestHttpCalculatesSubtractionAnswer()
         {
             // todo: put tests here
@@ -56,7 +55,7 @@ namespace VoidServer.IntegrationTests
             StringAssert.StartsWith((2 - 3).ToString(), client.VResponse);
         }
 
-        [Test, Order(4)]
+        [Test]
         public void TestHttpCalculatesDivisionAnswer()
         {
             // todo: put tests here
@@ -65,6 +64,5 @@ namespace VoidServer.IntegrationTests
             System.Console.WriteLine(client.VResponse);
             StringAssert.StartsWith((6 / 3).ToString(), client.VResponse);
         }
-
     }
 }

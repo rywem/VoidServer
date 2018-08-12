@@ -13,7 +13,7 @@ namespace VoidServerLibrary
     {
         private static Task ServerTask { get; set; }
         private static CancellationTokenSource _cancellationSource = new CancellationTokenSource();
-        static Server server = null;
+        static Server server;
         public static void Start<T>(string[] args) where T : VoidServerLibrary.Interfaces.IListener
         {
             ServerTask = Task.Factory.StartNew(() => 

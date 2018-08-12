@@ -32,7 +32,7 @@ namespace VoidServerLibrary.Listeners
 
                 // Create a listener.
                 listener = new HttpListener();
-                
+
                 // Add the prefixes.
                 foreach (string s in prefixes)
                 {
@@ -57,14 +57,17 @@ namespace VoidServerLibrary.Listeners
                         //System.Threading.Thread.Sleep(10);
 
                         //output.Close();
-                    }                    
+                        if (result == null)
+                            break;
+                    }
                     catch (Exception ex)
                     {
-                        break;
+                        return;
+                        //break;
                     }
 
                 }
-                if(listener != null && listener.IsListening == true)
+                if (listener != null && listener.IsListening == true)
                 {
                     listener.Close();
                     listener.Stop();
@@ -77,16 +80,19 @@ namespace VoidServerLibrary.Listeners
         }
         public void Stop()
         {
-            listener.Close();
-            listener.Stop();
+            if (listener != null && listener.IsListening == true)
+                listener.Close();
+            if (listener != null && listener.IsListening == true)
+                listener.Stop();
         }
 
 
         public void ListenerCallback(IAsyncResult result)
         {
-            //HttpListenerContext context = listener.GetContext();
-            //if (context == null)
-            //continue;
+            try
+            {
+
+            
             HttpListener listener = (HttpListener)result.AsyncState;
             // Call EndGetContext to complete the asynchronous operation.
             HttpListenerContext context = listener.EndGetContext(result);
@@ -122,7 +128,12 @@ namespace VoidServerLibrary.Listeners
             output.Write(buffer, 0, buffer.Length);
             // You must close the output stream.
             output.Close();
-            //listener.Close();
+                //listener.Close();
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
         }
 
 
