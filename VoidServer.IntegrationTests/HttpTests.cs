@@ -27,7 +27,6 @@ namespace VoidServer.IntegrationTests
         [Test]
         public void TestHttpCalculatesAdditionAnswer()
         {
-            // todo: put tests here
             VWebClient client = new VWebClient();
             client.Send(new VoidServerLibrary.Requests.CalculationRequest() { a = 2, b = 3, Operation = VoidServerLibrary.Util.Operation.Addition, URL = "http://127.0.0.1:8081/" });
             System.Console.WriteLine(client.VResponse);
@@ -37,7 +36,6 @@ namespace VoidServer.IntegrationTests
         public void TestHttpCalculatesMultiplicationAnswer()
         {
             System.Threading.Thread.Sleep(100);
-            // todo: put tests here
             VWebClient client = new VWebClient();
             client.Send(new VoidServerLibrary.Requests.CalculationRequest() { a = 2, b = 3, Operation = VoidServerLibrary.Util.Operation.Multiplication, URL = "http://127.0.0.1:8081/" });
             System.Console.WriteLine(client.VResponse);
@@ -48,7 +46,6 @@ namespace VoidServer.IntegrationTests
         [Test]
         public void TestHttpCalculatesSubtractionAnswer()
         {
-            // todo: put tests here
             VWebClient client = new VWebClient();
             client.Send(new VoidServerLibrary.Requests.CalculationRequest() { a = 2, b = 3, Operation = VoidServerLibrary.Util.Operation.Subtraction, URL = "http://127.0.0.1:8081/" });
             System.Console.WriteLine(client.VResponse);
@@ -58,7 +55,6 @@ namespace VoidServer.IntegrationTests
         [Test]
         public void TestHttpCalculatesDivisionAnswer()
         {
-            // todo: put tests here
             VWebClient client = new VWebClient();
             client.Send(new VoidServerLibrary.Requests.CalculationRequest() { a = 6, b = 3, Operation = VoidServerLibrary.Util.Operation.Division, URL = "http://127.0.0.1:8081/" });
             System.Console.WriteLine(client.VResponse);

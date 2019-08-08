@@ -53,10 +53,6 @@ namespace VoidServerLibrary.Listeners
 
                         result.AsyncWaitHandle.WaitOne();
                         Console.WriteLine("Request processed asyncronously.");
-                        //if(result.IsCompleted == true)
-                        //System.Threading.Thread.Sleep(10);
-
-                        //output.Close();
                         if (result == null)
                             break;
                     }
@@ -91,22 +87,19 @@ namespace VoidServerLibrary.Listeners
         {
             try
             {
+                HttpListener listener = (HttpListener)result.AsyncState;
+                // Call EndGetContext to complete the asynchronous operation.
+                HttpListenerContext context = listener.EndGetContext(result);
+                HttpListenerRequest request = context.Request;
+                HttpListenerResponse response = context.Response;
 
-            
-            HttpListener listener = (HttpListener)result.AsyncState;
-            // Call EndGetContext to complete the asynchronous operation.
-            HttpListenerContext context = listener.EndGetContext(result);
-            HttpListenerRequest request = context.Request;
-            HttpListenerResponse response = context.Response;
-
-            string responseString;
+                string responseString;
             if (request.HasEntityBody)
             {
 
                 using (var reader = new StreamReader(request.InputStream,
                                                      request.ContentEncoding))
                 {
-                    //responseString = reader.ReadToEnd()+ "<EOF>";
                     string requestString = reader.ReadToEnd();
                     Console.WriteLine(requestString);
                     Requests.CalculationRequest crequest = Newtonsoft.Json.JsonConvert.DeserializeObject<Requests.CalculationRequest>(requestString);

@@ -12,7 +12,6 @@ namespace VoidServer.IntegrationTests
         [OneTimeSetUp]
         public void RunBeforeAnyTests()
         {
-            //Start the server listener as a task
             ServerManager.Start<VSocketListener>(new string[] { "127.0.0.1" });
         }
         [OneTimeTearDown]
@@ -23,7 +22,6 @@ namespace VoidServer.IntegrationTests
         [Test]
         public void TestSocketCalculatesAdditionAnswer()
         {
-            // todo: put tests here
             VSocketClient client = new VSocketClient();
             client.Send(new VoidServerLibrary.Requests.CalculationRequest() { a = 2, b = 3, Operation = VoidServerLibrary.Util.Operation.Addition, URL = "127.0.0.1" });
             System.Console.WriteLine(client.VResponse);
@@ -33,7 +31,6 @@ namespace VoidServer.IntegrationTests
         [Test]
         public void TestSocketCalculatesSubstractionAnswer()
         {
-            // todo: put tests here
             VSocketClient client = new VSocketClient();
             client.Send(new VoidServerLibrary.Requests.CalculationRequest() { a = 4, b = 3, Operation = VoidServerLibrary.Util.Operation.Subtraction, URL = "127.0.0.1" });
             System.Console.WriteLine(client.VResponse);

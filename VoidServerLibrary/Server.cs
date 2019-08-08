@@ -4,7 +4,7 @@ using VoidServerLibrary.Interfaces;
 
 namespace VoidServerLibrary
 {
-    public class Server //: IServer
+    public class Server
     {
         IListener _listener;
         public Server(IListener listener)

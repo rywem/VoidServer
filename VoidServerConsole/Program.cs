@@ -19,10 +19,7 @@ namespace VoidServerConsole
             string[] http = new string[] { "http://127.0.0.1:8081/" };
             string[] socket = new string[] { "127.0.0.1" };            
             bool testsCompleted = false;
-            //ServerManager.Start<VSocketListener>(socket);
             ServerManager.Start<VHttpListener>(http);
-            //Runner r = new Runner();
-            //r.RunServer(http);
             Console.ReadKey();
             Console.WriteLine("Hit [ESC] to exit.");
             while (testsCompleted == false)
@@ -45,7 +42,6 @@ namespace VoidServerConsole
         static bool RunTest(string url)
         {
 
-            //VSocketClient client = new VSocketClient();
             VWebClient client = new VWebClient();
             client.Send(new CalculationRequest() {a = 1, b = 3, Operation = VoidServerLibrary.Util.Operation.Addition, URL = url });
             return true;

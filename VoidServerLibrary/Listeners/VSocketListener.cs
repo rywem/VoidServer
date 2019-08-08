@@ -88,9 +88,6 @@ namespace VoidServerLibrary.Listeners
         public void Stop()
         {
             return;
-            //throw new NotImplementedException();
-            //Socket listener = _listener as Socket;
-            //listener.Shutdown(SocketShutdown.Both);
         }
     }
 }
